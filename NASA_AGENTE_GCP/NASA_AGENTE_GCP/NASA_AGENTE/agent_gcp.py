@@ -4,6 +4,20 @@ from google.adk.tools.agent_tool import AgentTool
 from sub_agents.data_analyst.agent_gcp import data_analyst_gcp
 from sub_agents.visualizer.agent_gcp import visualizer_gcp
 
+# --- Parche dentro del módulo: asegura vertexai antes del import ---
+import sys, subprocess, importlib
+try:
+    importlib.import_module("vertexai")
+except ModuleNotFoundError:
+    subprocess.check_call([
+        sys.executable, "-m", "pip", "install", "google-cloud-aiplatform>=1.70.0,<2.0.0"
+    ])
+    importlib.invalidate_caches()
+# --- Fin parche ---
+
+from vertexai.preview.generative_models import GenerativeModel
+
+# ... el resto de tu código (función orquestador, etc.) ...
 
 # 🔹 Agente orquestador principal (Manager)
 root_agent = Agent(
