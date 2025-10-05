@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Chat con Gemini</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <meta name="color-scheme" content="light dark" />
+  <style>
+    /* Scroll suave en el contenedor del chat */
+    #messages { scroll-behavior: smooth; }
+    /* Burbujas */
+    .bubble { max-width: 85%; border-radius: 1rem; padding: .75rem 1rem; white-space: pre-wrap; }
+    .from-user { background: rgb(59 130 246 / 0.12); border: 1px solid rgb(59 130 246 / 0.3); }
+    .from-bot  { background: rgb(15 23 42 / 0.04);  border: 1px solid rgb(148 163 184 / 0.3); }
+    .mono { font-variant-ligatures: none; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-900 dark:bg-slate-900 dark:text-slate-100 min-h-screen">
+  <div class="max-w-3xl mx-auto px-4 py-8">
+    <header class="mb-6 flex items-center gap-3">
+      <div class="size-10 rounded-2xl bg-gradient-to-br from-sky-500 to-indigo-600"></div>
+      <div>
+        <h1 class="text-2xl font-semibold">Chat con Gemini</h1>
+        <p class="text-sm text-slate-500">Demo sencilla con historial y estados de carga</p>
+      </div>
+    </header>
+
+    <main class="rounded-2xl border border-slate-200/60 dark:border-slate-700/60 bg-white dark:bg-slate-800 shadow-sm">
+      <div id="messages" class="h-[60vh] overflow-y-auto p-4 space-y-3">
+        </div>
+
+      <form id="composer" class="border-t border-slate-200/60 dark:border-slate-700/60 p-3 flex items-end gap-2">
+        <textarea id="input" rows="1" placeholder="Escribe tu mensaje…" class="flex-1 resize-none rounded-xl border border-slate-300/70 dark:border-slate-600/70 bg-slate-50 dark:bg-slate-900 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-sky-500" required></textarea>
+        <button id="send" type="submit" class="rounded-xl px-4 py-2 bg-sky-600 text-white font-medium shadow hover:bg-sky-700 disabled:opacity-50 disabled:cursor-not-allowed">Enviar</button>
+      </form>
+    </main>
+
+    <footer class="mt-4 text-xs text-slate-500">
+      Alimentado por <span class="font-medium">Gemini</span>. Esta es una demo; no expongas tu API key en el navegador.
+    </footer>
+  </div>
+
+  <script>
+    const messagesEl = document.getElementById('messages');
+    const form = document.getElementById('composer');
+    const input = document.getElementById('input');
+    const sendBtn = document.getElementById('send');
+
+    /** Estado simple del historial */
+    const history = [];
+
+    function addMessage(text, who) {
+      const row = document.createElement('div');
+      row.className = `flex ${who === 'user' ? 'justify-end' : 'justify-start'}`;
+
+      const bubble = document.createElement('div');
+      bubble.className = `bubble ${who === 'user' ? 'from-user' : 'from-bot'}`;
+      bubble.textContent = text;
+
+      row.appendChild(bubble);
+      messagesEl.appendChild(row);
+      messagesEl.scrollTop = messagesEl.scrollHeight;
+    }
+
+    function setThinking(on) {
+      let el = document.getElementById('thinking');
+      if (on) {
+        if (!el) {
+          el = document.createElement('div');
+          el.id = 'thinking';
+          el.className = 'flex justify-start';
+          el.innerHTML = `<div class="bubble from-bot mono">pensando…</div>`;
+          messagesEl.appendChild(el);
+          messagesEl.scrollTop = messagesEl.scrollHeight;
+        }
+      } else if (el) {
+        el.remove();
+      }
+    }
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const text = input.value.trim();
+      if (!text) return;
+
+      // UI
+      addMessage(text, 'user');
+      input.value = '';
+      sendBtn.disabled = true;
+      setThinking(true);
+
+      // Mantén hasta 20 pares en el historial (suficiente para la demo)
+      history.push({ role: 'user', content: text });
+      if (history.length > 40) history.splice(0, history.length - 40);
+
+      try {
+        // *** ESTA SOLICITUD AHORA FUNCIONARÁ CORRECTAMENTE ***
+        const res = await fetch('/api/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ message: text, history })
+        });
+
+        if (!res.ok) throw new Error('Error de red');
+        const data = await res.json();
+
+        // Muestra respuesta
+        setThinking(false);
+        addMessage(data.text || '(respuesta vacía)', 'bot');
+
+        history.push({ role: 'assistant', content: data.text || '' });
+      } catch (err) {
+        setThinking(false);
+        addMessage('Ups, hubo un problema. Intenta de nuevo.', 'bot');
+        console.error(err);
+      } finally {
+        sendBtn.disabled = false;
+        input.focus();
+      }
+    });
+  </script>
+</body>
+</html>
