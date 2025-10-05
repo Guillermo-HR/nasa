@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Aqua Sentinel — La Paz | Hackathon</title>
+  <meta name="description" content="Solución basada en datos geocientíficos (NASA & Earth Observation) para planificación urbana sostenible en La Paz, BCS." />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="" crossorigin="" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <div class="container">
+      <div class="brand">
+        <div class="logo">AS</div>
+        <div>
+          <h1>Aqua Sentinel — La Paz</h1>
+          <p class="lead">Plan de proyecto basado en datos geocientíficos (observación de la Tierra) para una ciudad costera en crecimiento — enfoque: agua, ecosistemas y resiliencia.</p>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="container" style="padding:22px 20px 80px">
+    <div class="grid">
+      <section>
+        <div class="card">
+          <div class="section-title">
+            <div>
+              <h2 style="margin:0;font-size:20px">El reto</h2>
+              <p style="margin:6px 0;color:var(--muted)">Desarrollar un plan que mejore calidad de vida y cuide el ambiente usando datos geocientíficos.</p>
+            </div>
+            <div class="chips">
+              <div class="chip">La Paz, BCS</div>
+              <div class="chip">Recursos hídricos</div>
+              <div class="chip">Resiliencia costera</div>
+            </div>
+          </div>
+
+          <hr style="border:none;border-top:1px solid #eef3ff;margin:12px 0 18px">
+
+          <h3 style="margin:0 0 8px">Resumen ejecutivo</h3>
+          <p style="margin:0 0 12px;color:var(--muted)">Aqua Sentinel combina capas satelitales (agua, temperatura superficial, elevación y subsuperficie) con sensores locales y participación ciudadana para priorizar intervenciones de corto y mediano plazo que reduzcan estrés hídrico, protejan la costa y aumenten espacios verdes.</p>
+
+          <h4 style="margin-top:12px">Componentes clave</h4>
+          <ul style="margin:8px 0 12px;color:var(--muted)">
+            <li><strong>Mapa interactivo:</strong> visualiza capas EO (agua, UHI, elevación, uso de suelo).</li>
+            <li><strong>Panel de métricas:</strong> indicadores de estrés hídrico, disponibilidad de agua, riesgo de inundación costera.</li>
+            <li><strong>Proyectos pilotos:</strong> jardines de retención, redes de recarga de acuíferos, corredores verdes costeros.</li>
+            <li><strong>Participación:</strong> formularios vecinales y sensoramiento comunitario (phone + sensores IoT).</li>
+          </ul>
+
+          <h4 style="margin-top:10px">Cómo respaldar con datos EO</h4>
+          <ol style="margin:8px 0 12px;color:var(--muted)">
+            <li>Identificar capas satelitales que muestren variación temporal del agua (humedad de suelo, evapotranspiración, reservas subterráneas indirectas).</li>
+            <li>Mapear temperatura superficial para detectar islas de calor urbanas y orientar plantación de árboles.</li>
+            <li>Usar elevación y modelos LIDAR/SRTM para mapear riesgo de inundación costera y planear defensas naturales.</li>
+          </ol>
+
+          <h4 style="margin-top:10px">Resultados esperados</h4>
+          <ul style="margin:8px 0 12px;color:var(--muted)">
+            <li>Reducción del estrés hídrico en zonas prioritarias en 3–5 años.</li>
+            <li>Mejor protección costera mediante soluciones basadas en la naturaleza.</li>
+            <li>Mayor acceso a espacios verdes y menor UHI en barrios vulnerables.</li>
+          </ul>
+
+          <div style="display:flex;gap:10px;margin-top:10px">
+            <button id="download-plan" style="padding:10px 14px;border-radius:10px;border:none;background:var(--accent);color:white;font-weight:700;cursor:pointer">Descargar presentación (PDF)</button>
+            <button id="edit" style="padding:10px 14px;border-radius:10px;border:1px solid #e6eefc;background:white;color:var(--accent);font-weight:700;cursor:pointer">Editar propuesta</button>
+          </div>
+        </div>
+
+        <div style="height:18px"></div>
+
+        <div class="card">
+          <h3 style="margin:0 0 10px">Propuestas piloto (rápido impacto)</h3>
+          <div class="proposals">
+            <div style="padding:12px;border-radius:10px;background:#fbfbff">
+              <h4 style="margin:0 0 6px">1) Puntos de recarga de agua y monitoreo</h4>
+              <p style="margin:0;color:var(--muted)">Instalar estaciones de monitoreo + sistemas de captación pluvial en escuelas y plazas para reducir dependencia de la desalinización y optimizar distribución.</p>
+            </div>
+            <div style="padding:12px;border-radius:10px;background:#fbfbff">
+              <h4 style="margin:0 0 6px">2) Corredores verdes costeros</h4>
+              <p style="margin:0;color:var(--muted)">Restauración de dunas y manglares guiada por mapas de cambios costeros para disminuir erosión y crear áreas recreativas.</p>
+            </div>
+            <div style="padding:12px;border-radius:10px;background:#fbfbff">
+              <h4 style="margin:0 0 6px">3) Micro-bosques urbanos</h4>
+              <p style="margin:0;color:var(--muted)">Plantaciones estratégicas en barrios con mayor UHI para bajar temperaturas locales y mejorar salud pública.</p>
+            </div>
+            <div style="padding:12px;border-radius:10px;background:#fbfbff">
+              <h4 style="margin:0 0 6px">4) Dashboard municipal</h4>
+              <p style="margin:0;color:var(--muted)">Panel abierto para líderes de ciudad con KPIs, alertas y opción para recibir reportes ciudadanos.</p>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+      <aside>
+        <div class="card">
+          <div class="section-title">
+            <div>
+              <h3 style="margin:0">Mapa & Capas</h3>
+              <p style="margin:4px 0 0;color:var(--muted);font-size:13px">Interactúa con capas EO y datos locales (placeholder).</p>
+            </div>
+          </div>
+
+          <div id="map"></div>
+
+          <div style="margin-top:12px" class="layers">
+            <div class="layer"><div class="sw">W</div><div><strong>Humedad de suelo</strong><div style="color:var(--muted);font-size:13px">Indicador de estrés hídrico (satélite SMAP / modelos)</div></div></div>
+            <div class="layer"><div class="sw">T</div><div><strong>Temp. Superficial</strong><div style="color:var(--muted);font-size:13px">Detecta islas de calor (MODIS / Landsat)</div></div></div>
+            <div class="layer"><div class="sw">E</div><div><strong>Elevación & Costa</strong><div style="color:var(--muted);font-size:13px">Riesgo de inundación (SRTM / LIDAR)</div></div></div>
+            <div class="layer"><div class="sw">S</div><div><strong>Salinidad</strong><div style="color:var(--muted);font-size:13px">Detección de vegetación y pérdida (NDVI)</div></div></div>
+          </div>
+        </div>
+
+        <div style="height:12px"></div>
+
+        <div class="card">
+          <h4 style="margin:0 0 8px">Participación ciudadana</h4>
+          <p style="margin:0 0 10px;color:var(--muted)">Formulario para que residentes reporten problemas, suban fotos y propongan microproyectos en su colonia.</p>
+
+          <form id="report-form">
+            <label style="display:block;font-weight:600;margin-bottom:6px">Tipo de reporte</label>
+            <select id="tipo" style="width:100%;padding:8px;border-radius:8px;margin-bottom:8px">
+              <option>Falta de agua</option>
+              <option>Inundación</option>
+              <option>Falta de áreas verdes</option>
+              <option>Erosión costera</option>
+            </select>
+            <label style="display:block;font-weight:600;margin-bottom:6px">Descripción</label>
+            <textarea id="desc" style="width:100%;padding:8px;border-radius:8px;height:84px;margin-bottom:8px"></textarea>
+            <button type="submit" style="width:100%;padding:10px;border-radius:10px;border:none;background:var(--accent);color:white;font-weight:700">Enviar reporte</button>
+          </form>
+          <p id="form-msg" style="color:green;display:none;margin-top:8px">Reporte enviado — gracias.</p>
+        </div>
+
+        <div style="height:12px"></div>
+
+        <div class="card">
+          <h4 style="margin:0 0 8px">Rol de líderes municipales</h4>
+          <ul style="margin:6px 0 0;color:var(--muted)">
+            <li><strong>Planeación:</strong> integrar capas EO en el SIG municipal y priorizar proyectos.</li>
+            <li><strong>Parques & Medio Ambiente:</strong> coordinar corredores verdes y restauraciones costeras.</li>
+            <li><strong>Obras públicas:</strong> adaptar infraestructura con base en riesgo hídrico y elevación.</li>
+            <li><strong>Comunicaciones:</strong> habilitar canales para reportes y feedback ciudadano.</li>
+          </ul>
+        </div>
+
+      </aside>
+    </div>
+
+    <div style="height:20px"></div>
+
+    <div class="card">
+      <h3 style="margin:0 0 10px">Plan de implementación (12-36 meses)</h3>
+      <ol style="margin:8px 0 12px;color:var(--muted)">
+        <li><strong>Meses 0–3:</strong> inventario de datos, acuerdos con dependencias, desplegar prototipo de mapa.</li>
+        <li><strong>Meses 3–12:</strong> pilotos de captación pluvial, sensores de humedad, campañas de reforestación urbana.</li>
+        <li><strong>Año 1–3:</strong> escalamiento, evaluación de impacto y actualización del modelo de gestión hídrica y costera.</li>
+      </ol>
+
+      <h4 style="margin:8px 0 6px">KPIs sugeridos</h4>
+      <ul style="margin:6px 0 12px;color:var(--muted)">
+        <li>Reducción % de sectores con estrés hídrico (índice NDWI/Humedad).</li>
+        <li>Incremento m² de cobertura verde en barrios priorizados.</li>
+        <li>Reducción de temperatura superficial en micro-bosques.</li>
+      </ul>
+    </div>
+
+    <footer class="container">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap">
+        <div>© Aqua Sentinel — NASA Space Apps · Equipo: Fractals</div>
+    </footer>
+  </main>
+
+  <!-- Scripts: Leaflet map placeholder + UI handlers -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="script.js"></script>
+</body>
+
+</html>

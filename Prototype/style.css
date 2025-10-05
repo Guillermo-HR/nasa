@@ -1,0 +1,33 @@
+
+    :root{--accent:#0b76ef;--muted:#6b7280;--card:#ffffff;--bg:#f6f7fb}
+    *{box-sizing:border-box;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial}
+    body{margin:0;background:var(--bg);color:#111}
+    header{background:linear-gradient(180deg, #eaf4ff 0%, #ffffff 60%);padding:36px 20px;border-bottom:1px solid #e6eefc}
+    .container{max-width:1100px;margin:0 auto}
+    .brand{display:flex;align-items:center;gap:14px}
+    .logo{width:64px;height:64px;border-radius:12px;background:linear-gradient(135deg,var(--accent),#6bd3ff);display:flex;align-items:center;justify-content:center;color:white;font-weight:800}
+    h1{margin:0;font-size:28px}
+    p.lead{color:var(--muted);margin:8px 0 0}
+
+    .grid{display:grid;grid-template-columns:1fr 380px;gap:20px;margin-top:26px}
+    .card{background:var(--card);padding:18px;border-radius:12px;box-shadow:0 6px 18px rgba(15,23,42,0.06)}
+
+    /* Map */
+    #map{height:420px;border-radius:10px;overflow:hidden}
+
+    .section-title{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+    .chips{display:flex;gap:8px;flex-wrap:wrap}
+    .chip{padding:6px 10px;border-radius:999px;background:#eef4ff;color:var(--accent);font-weight:600;font-size:13px}
+
+    /* Layers list */
+    .layers{display:flex;flex-direction:column;gap:12px}
+    .layer{display:flex;align-items:center;gap:12px}
+    .layer .sw{width:44px;height:28px;border-radius:6px;background:#f3f6ff;border:1px solid #e9eefc;display:flex;align-items:center;justify-content:center;font-size:12px}
+
+    /* Proposal cards */
+    .proposals{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+
+    footer{margin-top:24px;padding:20px 0;color:var(--muted);font-size:14px}
+
+    /* Responsive */
+    @media (max-width:940px){.grid{grid-template-columns:1fr} .proposals{grid-template-columns:1fr}}
