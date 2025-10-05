@@ -1,14 +1,37 @@
 import streamlit as st
-from agent_gcp_vertex import orquestador
+import sys, subprocess, importlib
 import os
 import time
 
-# Ruta del dataset
-file_path = "./data/M03_01_La_Paz.csv"
+# --- Parche: instala Vertex AI SDK si no está (evita ModuleNotFoundError: vertexai) ---
+def _ensure_vertexai():
+    try:
+        importlib.import_module("vertexai")
+    except ModuleNotFoundError:
+        with st.spinner("Instalando dependencias de Vertex AI..."):
+            subprocess.check_call([
+                sys.executable, "-m", "pip", "install", "google-cloud-aiplatform>=1.70.0,<2.0.0"
+            ])
+            importlib.invalidate_caches()
+
+_ensure_vertexai()
+# --- Fin parche ---
+
+from agent_gcp_vertex import orquestador
+
+# Ruta del dataset robusta (funciona local y en Streamlit Cloud)
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+file_path = os.path.join(BASE_DIR, "data", "M03_01_La_Paz.csv")
 
 # Configuración de la página
 st.set_page_config(page_title="Agente de Datos CSV", page_icon="🤖", layout="centered")
 st.title("🤖 Chat con Agente de Datos (Gemini - Vertex AI + Pandas)")
+
+# Verificar que el CSV exista (ayuda mucho en la nube)
+if not os.path.exists(file_path):
+    st.error(f"No encuentro el CSV en: `{file_path}`")
+    st.info("Asegúrate de que el archivo esté en el repo dentro de `NASA_AGENTE_GCP/NASA_AGENTE_GCP/NASA_AGENTE/data/`.")
+    st.stop()
 
 # Inicializar historial de chat
 if "messages" not in st.session_state:
@@ -35,7 +58,6 @@ if user_input:
             response = orquestador(user_input, file_path)
         except Exception as e:
             response = f"⚠️ Error al procesar la solicitud: {e}"
-
         elapsed = time.time() - start_time
 
     # Mostrar respuesta
